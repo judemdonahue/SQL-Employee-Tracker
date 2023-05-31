@@ -1,6 +1,6 @@
 // Node Packages
 const inquirer = require('inquirer')
-const mysql = require('mysql2');
+
 
 const questions = [
     {
@@ -11,14 +11,10 @@ const questions = [
     },
 ]
 
-const db = mysql.createConnection(
-    {
-        host: 'localhost',
-        // mysql username
-        user: 'root',
-        // mysql password
-        password: '',
-        database: ''
-    },
-    console.log('Connected to DataBase');
-)
+function inquire() {
+    inquirer.prompt(questions).then((input) => {
+        switch (input.next) {
+            case 'View All Employees':
+        }
+    })
+}
