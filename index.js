@@ -1,6 +1,6 @@
 // Node Packages
 const inquirer = require('inquirer')
-
+const connection = require('./db/connection');
 
 const questions = [
     {
@@ -15,6 +15,9 @@ function inquire() {
     inquirer.prompt(questions).then((input) => {
         switch (input.next) {
             case 'View All Employees':
+                
+    
+        
         }
     })
 }
