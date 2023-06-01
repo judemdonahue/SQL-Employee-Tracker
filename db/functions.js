@@ -1,10 +1,10 @@
+const db = require('./connection');
 
 
 
 
-
-function viewEmployees() {
-    connection.promise().query(
+function viewAllEmployees(callback) {
+db.promise().query(
     `SELECT 
         employee.id, 
         employee.first_name, 
@@ -22,22 +22,26 @@ function viewEmployees() {
     LEFT JOIN 
         employee manager on manager.id = employee.manager_id;`
     )
-}
+    .then(([rows, fields]) => {
+        console.table(rows)
+        callback()})
+      .catch(console.table);
+};
 
 function addEmployee() {
-    connection.promise().query(
+    db.promise().query(
 
     )
 }
 
 function updateEmployeeRole() {
-    connection.promise().query(
+    db.promise().query(
         
     )
 }
 
 function viewRoles() {
-    connection.promise().query(
+    db.promise().query(
     `SELECT
         role.id,
         role.title,
@@ -49,25 +53,35 @@ function viewRoles() {
         department ON department.id = role.department_id
     `    
     )
+    .then(([rows, fields]) => {
+        console.table(rows)
+        callback()})
+      .catch(console.table);
 }
 
 function addRole() {
-    connection.promise().query(
+    db.promise().query(
         
     )
 }
 
 function viewDepartments() {
-    connection.promise().query(
+    db.promise().query(
     `SELECT
         department.id,
         department.title,
     `        
     )
+    .then(([rows, fields]) => {
+        console.table(rows)
+        callback()})
+      .catch(console.table);
 }
 
 function addDepartment() {
-    connection.promise().query(
+    db.promise().query(
         
     )
 }
+
+module.exports = { viewAllEmployees, addEmployee, viewRoles, viewDepartments}

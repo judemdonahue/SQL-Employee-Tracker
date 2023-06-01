@@ -14,11 +14,14 @@ VALUES  ('Marketing Rep', 80000, 1),
         ('Engineering Lead', 130000, 4);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES  ('Tupac', 'Shakur', 1, 2),
-        ('Biggie', 'Smalls', 2, NULL),
-        ('Michael', 'Bolton', 1, 4),
-        ('Bill', 'Lumbergh', 2, NULL),
-        ('Richard', 'Hendricks', 1, 6),
-        ('Erlich', 'Bachman', 2, NULL),
-        ('Paul', 'McCartney', 1, 8),
-        ('Billy', 'Shears', 2, NULL);
+VALUES  ('Jerry', 'Heller', 2, NULL),
+        ('Bill', 'Lumbergh', 4, NULL),
+        ('Erlich', 'Bachman', 6, NULL),
+        ('Billy', 'Shears', 8, NULL);
+
+
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES  ('Eric', 'Wright', 1, 1),
+        ('Michael', 'Bolton', 3, 2),
+        ('Richard', 'Hendricks', 5, 3),
+        ('Paul', 'McCartney', 7, 4);
