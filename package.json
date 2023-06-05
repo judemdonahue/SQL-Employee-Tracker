@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/judemdonahue/SQL-Employee-Tracker#readme",
   "dependencies": {
+    "chalk": "^5.2.0",
+    "chalk-animation": "^2.0.3",
     "inquirer": "^8.2.4",
     "mysql2": "^2.1.0"
   }
