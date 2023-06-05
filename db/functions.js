@@ -37,11 +37,14 @@ async function addEmployee(addEmployeeRole, addEmployeeManager, addFirstName, ad
             (default, '${addFirstName}', '${addLastName}', ${role_id}, ${manager_id} )`).then(() => callback())
 };
 
-function updateEmployeeRole() {
-    db.promise().query(
-        
-    )
-}
+async function updateEmployeeRole(selectEmployee, addEmployeeRole, callback) {
+    [selectedEmployeeRow] = await db.promise().query(`SELECT id FROM employee WHERE CONCAT(first_name, ' ', last_name) LIKE '${selectEmployee}'`);
+    [updatedPositionRow] = await db.promise().query(`SELECT id FROM role WHERE title = '${addEmployeeRole}'`);
+    updatedPositionId = updatedPositionRow[0].id;
+    selectedEmployee = selectedEmployeeRow[0].id;
+    db.promise().query(`UPDATE employee SET role_id = ${updatedPositionId} WHERE id = ${selectedEmployee}`)
+    .then(() => callback())
+};
 
 function viewRoles(callback) {
     db.promise().query(
@@ -62,11 +65,16 @@ function viewRoles(callback) {
       .catch(console.table);
 }
 
-function addRole() {
+async function addRole(addRoleName, addRoleSalary, addRoleDepartment, callback) {
+    const [deptRow] = await db.promise().query(`SELECT id FROM department WHERE name = '${addRoleDepartment}'`)
+    const dept_id = deptRow[0].id;
     db.promise().query(
-        
-    )
-}
+        `INSERT INTO
+            role
+        VALUES
+            (default, '${addRoleName}', '${addRoleSalary}', ${dept_id} )`)
+            .then(() => callback())
+};
 
 function viewDepartments(callback) {
     db.promise().query(
@@ -83,10 +91,13 @@ function viewDepartments(callback) {
       .catch(console.table);
 }
 
-function addDepartment() {
+function addDepartment(addDeptName, callback) {
     db.promise().query(
-        
-    )
+        `INSERT INTO
+            department
+        VALUES
+            (default, '${addDeptName}')`)
+    .then(() => callback())
 }
 
 //inquirer prompt functions
@@ -117,6 +128,18 @@ async function deptsCLI() {
     .catch(console.log);
 }
 
+async function employeesCLI() {
+    return db.promise().query(
+        `SELECT
+            CONCAT(first_name, " ", last_name) AS full_name 
+        FROM 
+            employee`
+    )
+    .then(([rows, fields]) => {
+        return rows.map(row => row.full_name)})
+      .catch(console.log);
+}
+
 async function managersCLI() {
     return db.promise().query(
     `SELECT
@@ -132,4 +155,4 @@ async function managersCLI() {
     .catch(console.log);
 };
 
-module.exports = { viewAllEmployees, addEmployee, viewRoles, viewDepartments, rolesCLI, deptsCLI, managersCLI}
+module.exports = { viewAllEmployees, addEmployee, viewRoles, viewDepartments, rolesCLI, deptsCLI, managersCLI, updateEmployeeRole, employeesCLI, addRole, addDepartment}

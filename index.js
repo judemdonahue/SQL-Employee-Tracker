@@ -12,11 +12,11 @@ const questions = [
     choices: [
       'View All Employees',
       'Add Employee',
-      // 'Update Employee Role',
+      'Update Employee Role',
       'View All Roles',
-      // 'Add Role',
+      'Add Role',
       'View All Departments',
-      // 'Add Department',
+      'Add Department',
       'Quit'
     ]
   }
@@ -33,8 +33,8 @@ function init() {
             break;
         case 'Add Employee':
               async function rolesPrompt() {
-                let roles = await functions.rolesCLI()
-                let managerList = await functions.managersCLI()
+                let roleOptions = await functions.rolesCLI()
+                let managerOptions = await functions.managersCLI()
               inquirer.prompt([
                 {
                   type: 'input',
@@ -50,28 +50,80 @@ function init() {
                   type: 'list',
                   name: 'addEmployeeRole',
                   message: `What is the employee's role:`,
-                  choices: roles
+                  choices: roleOptions
                 },
                 {
                   type: 'list',
                   name: 'addEmployeeManager',
                   message: `Who will be the new employee's Manager?`,
-                  choices: managerList
+                  choices: managerOptions
                 }]).then((input) => {
                 functions.addEmployee(input.addEmployeeRole, input.addEmployeeManager, input.addFirstName, input.addLastName, init)
               })};
               rolesPrompt();
             break;
-        case 'View All Departments':
-            functions.viewDepartments(init);
-            break;
+            case 'Update Employee Role':
+              async function updatePrompt() {
+                let roleOptions = await functions.rolesCLI()
+                let employeeOptions = await functions.employeesCLI()
+                inquirer.prompt([
+                  {
+                    type: 'list',
+                    name: 'selectEmployee',
+                    message: `Which employee's position would you like to update?`,
+                    choices: employeeOptions
+                  },
+                  {
+                    type: 'list',
+                    name: 'addEmployeeRole',
+                    message: `What is the employee's new role?`,
+                    choices: roleOptions
+                  }]).then((input) => {
+                  functions.updateEmployeeRole(input.selectEmployee, input.addEmployeeRole, init)
+                })};
+                updatePrompt();
+              break;
         case 'View All Roles':
             functions.viewRoles(init);
             break;
-
-    
-      // Handle other menu choices here
-        
+        case 'Add Role':
+          async function newRolePrompt() {
+            let departmentList = await functions.deptsCLI()
+            inquirer.prompt([
+              {
+                type: 'input',
+                name: 'addRoleName',
+                message: 'What is the name of the role being added?'
+              },
+              {
+                type: 'input',
+                name: 'addRoleSalary',
+                message: 'What is the salary cap for the new position?'
+              },
+              {
+                type: 'list',
+                name: 'addRoleDepartment',
+                message: 'What department will this position belong to?',
+                choices: departmentList
+              }]).then((input) => {
+                functions.addRole(input.addRoleName, input.addRoleSalary, input.addRoleDepartment, init)
+              })};
+              newRolePrompt()
+          break;
+          case 'View All Departments':
+            functions.viewDepartments(init);
+            break;
+          case 'Add Department':
+              inquirer.prompt([
+                {
+                  type: 'input',
+                  name: 'addDeptName',
+                  message: 'What is the name of the department being added?'
+                }
+              ]).then((input) => {
+                  functions.addDepartment(input.addDeptName, init)
+                });
+            break;
       case 'Quit':
         console.log('Goodbye!');
         break;
