@@ -36,6 +36,10 @@ The project aims to create a command-line application using Node.js, Inquirer, a
 
 7. Run  `npm start`  to begin using this application.
 
+
+[SQL-Employee-Tracker-Demo.webm](https://github.com/judemdonahue/SQL-Employee-Tracker/assets/122579098/6258d7b8-8c59-4704-ac86-3b71a102e488)
+
+
 ## License
 This application is covered under the MIT License.
 
