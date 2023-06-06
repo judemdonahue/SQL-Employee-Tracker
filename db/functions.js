@@ -26,15 +26,15 @@ function viewAllEmployees(callback) {
 };
 
 async function addEmployee(addEmployeeRole, addEmployeeManager, addFirstName, addLastName, callback) {
-    const [roleRow] = await db.promise().query(`SELECT id FROM role WHERE title = '${addEmployeeRole}'`)
-    const [managerRow] = await db.promise().query(`SELECT id FROM employee WHERE CONCAT(first_name, ' ', last_name) LIKE '${addEmployeeManager}'`)
-    const role_id = roleRow[0].id;
-    const manager_id = managerRow[0].id;
+    [getRoleId] = await db.promise().query(`SELECT id FROM role WHERE title = '${addEmployeeRole}'`);
+    [getManagerId] = await db.promise().query(`SELECT id FROM employee WHERE CONCAT(first_name, ' ', last_name) LIKE '${addEmployeeManager}'`);
+    positionId = getRoleId[0].id;
+    managerId = getManagerId[0].id;
     db.promise().query(
         `INSERT INTO
             employee
         VALUES
-            (default, '${addFirstName}', '${addLastName}', ${role_id}, ${manager_id} )`).then(() => callback())
+            (default, '${addFirstName}', '${addLastName}', ${positionId}, ${managerId} )`).then(() => callback())
 };
 
 async function updateEmployeeRole(selectEmployee, addEmployeeRole, callback) {
@@ -100,7 +100,7 @@ function addDepartment(addDeptName, callback) {
     .then(() => callback())
 }
 
-//inquirer prompt functions
+//Port Selections to Inquirer Prompts
 
 async function rolesCLI() {
     return db.promise().query(
@@ -131,19 +131,19 @@ async function deptsCLI() {
 async function employeesCLI() {
     return db.promise().query(
         `SELECT
-            CONCAT(first_name, " ", last_name) AS full_name 
+            CONCAT(first_name, ' ', last_name) AS employee_name 
         FROM 
             employee`
     )
     .then(([rows, fields]) => {
-        return rows.map(row => row.full_name)})
+        return rows.map(row => row.employee_name)})
       .catch(console.log);
 }
 
 async function managersCLI() {
     return db.promise().query(
     `SELECT
-        CONCAT(first_name, " ", last_name) AS full_name 
+        CONCAT(first_name, ' ', last_name) AS manager 
     FROM 
         employee
     WHERE 
@@ -151,8 +151,8 @@ async function managersCLI() {
     `    
     )
     .then(([rows, fields]) => {
-      return rows.map(row => row.full_name)})
+      return rows.map(row => row.manager)})
     .catch(console.log);
 };
 
-module.exports = { viewAllEmployees, addEmployee, viewRoles, viewDepartments, rolesCLI, deptsCLI, managersCLI, updateEmployeeRole, employeesCLI, addRole, addDepartment}
+module.exports = { viewAllEmployees, addEmployee, updateEmployeeRole, viewRoles, addRole, viewDepartments, addDepartment, rolesCLI, deptsCLI, managersCLI, employeesCLI}
